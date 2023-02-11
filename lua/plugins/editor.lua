@@ -1,9 +1,21 @@
+local function ts_builtin(func_name)
+    return function()
+        require('telescope.builtin')[func_name]()
+    end
+end
+
 return {
     -- Show indent vertical line
     "lukas-reineke/indent-blankline.nvim",
 
-    --
-    'nvim-treesitter/nvim-treesitter-context',
+    -- Show initial line of function, etc.
+    {
+        'nvim-treesitter/nvim-treesitter-context',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
+        event = "BufReadPost",
+    },
 
     -- Show code outline
     {
@@ -23,16 +35,15 @@ return {
         'nvim-telescope/telescope.nvim',
         version = '0.1.1',
         dependencies = { 'nvim-lua/plenary.nvim' },
+        cmd = 'Telescope',
+        keys = {
+            { '<Leader>ft',      '<Cmd>Telescope<CR>' },
+            { '<Leader>ff',      ts_builtin('find_files') },
+            { '<Leader><space>', ts_builtin('find_files') },
+            { '<Leader>fo',      ts_builtin('oldfiles') },
+            { '<Leader>fh',      ts_builtin('help_tags') },
+        },
         config = function()
-            local builtin = require('telescope.builtin')
-            local actions = require('telescope.actions')
-
-            vim.keymap.set('n', '<Leader>ft', '<Cmd>Telescope<CR>')
-            vim.keymap.set('n', '<Leader>ff', builtin.find_files)
-            vim.keymap.set('n', '<Leader><space>', builtin.find_files)
-            vim.keymap.set('n', '<Leader>fo', builtin.oldfiles)
-            vim.keymap.set('n', '<Leader>fh', builtin.help_tags)
-
             require('telescope').setup {
                 defaults = {
                     layout_config = {
@@ -40,7 +51,7 @@ return {
                     },
                     mappings = {
                         i = {
-                            ['<Esc>'] = actions.close,
+                            ['<Esc>'] = require('telescope.actions').close,
                             ['<C-u>'] = false,
                             ["<C-d>"] = false
                         },

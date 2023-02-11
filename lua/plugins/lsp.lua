@@ -2,15 +2,12 @@ return {
     -- Lsp server manager
     {
         'williamboman/mason.nvim',
-        config = function()
-            require('mason').setup()
-        end,
+        cmd = "Mason",
+        config = true,
     },
     {
         'williamboman/mason-lspconfig.nvim',
-        config = function()
-            require('mason-lspconfig').setup()
-        end
+        config = true,
     },
 
     -- Configs for the LSP client

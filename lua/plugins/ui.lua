@@ -13,6 +13,7 @@ return {
     {
         'nvim-lualine/lualine.nvim',
         dependencies = 'nvim-tree/nvim-web-devicons',
+        event = 'VeryLazy',
         config = function()
             require('lualine').setup {
                 options = {
@@ -29,6 +30,7 @@ return {
         'akinsho/bufferline.nvim',
         version = "v3.*",
         dependencies = 'nvim-tree/nvim-web-devicons',
+        event = 'BufAdd',
         config = function()
             require("bufferline").setup {}
 

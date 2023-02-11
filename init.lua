@@ -17,4 +17,13 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup('plugins')
+local opts = {
+    ui = {
+        icons = {
+            -- lazy = "鈴 ",
+            lazy = "󰒲 "
+        }
+    }
+}
+
+require('lazy').setup('plugins', opts)
