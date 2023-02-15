@@ -2,9 +2,11 @@
 return {
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
-    event = "BufReadPost",
+    -- event = "BufReadPost",
     dependencies = {
         'nvim-treesitter/nvim-treesitter-textobjects',
+        -- Show initial line of function, etc.
+        'nvim-treesitter/nvim-treesitter-context',
     },
     config = function()
         require('nvim-treesitter.configs').setup {
@@ -95,6 +97,16 @@ return {
                     goto_previous = {
                         ["[d"] = "@conditional.outer",
                     }
+                },
+            },
+
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    init_selection = "<C-s>",
+                    node_incremental = "<C-s>",
+                    -- scope_incremental = "grc",
+                    -- node_decremental = "grm",
                 },
             },
         }

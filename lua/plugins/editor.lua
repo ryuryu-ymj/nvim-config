@@ -8,13 +8,21 @@ return {
     -- Show indent vertical line
     "lukas-reineke/indent-blankline.nvim",
 
-    -- Show initial line of function, etc.
+    -- Show git signs at the left column
     {
-        'nvim-treesitter/nvim-treesitter-context',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
+        'lewis6991/gitsigns.nvim',
+        event = { "BufReadPre", "BufNewFile" },
+        config = true,
+        opts = {
+            signs = {
+                add = { text = "▎" },
+                change = { text = "▎" },
+                delete = { text = "" },
+                topdelete = { text = "" },
+                changedelete = { text = "▎" },
+                untracked = { text = "▎" },
+            },
         },
-        event = "BufReadPost",
     },
 
     -- Show code outline
@@ -33,7 +41,7 @@ return {
     -- Fuzzy finder
     {
         'nvim-telescope/telescope.nvim',
-        version = '0.1.1',
+        -- version = '0.1.1',
         dependencies = { 'nvim-lua/plenary.nvim' },
         cmd = 'Telescope',
         keys = {
@@ -47,7 +55,9 @@ return {
             require('telescope').setup {
                 defaults = {
                     layout_config = {
-                        preview_width = 0.6,
+                        horizontal = {
+                            preview_width = 0.6,
+                        }
                     },
                     mappings = {
                         i = {

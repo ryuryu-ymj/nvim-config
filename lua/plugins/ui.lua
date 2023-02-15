@@ -9,6 +9,24 @@ return {
         end,
     },
 
+    -- Better vim.ui
+    {
+        "stevearc/dressing.nvim",
+        lazy = true,
+        init = function()
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.ui.select = function(...)
+                require("lazy").load({ plugins = { "dressing.nvim" } })
+                return vim.ui.select(...)
+            end
+            ---@diagnostic disable-next-line: duplicate-set-field
+            vim.ui.input = function(...)
+                require("lazy").load({ plugins = { "dressing.nvim" } })
+                return vim.ui.input(...)
+            end
+        end,
+    },
+
     -- Status line
     {
         'nvim-lualine/lualine.nvim',
@@ -28,7 +46,7 @@ return {
     -- Buffer line
     {
         'akinsho/bufferline.nvim',
-        version = "v3.*",
+        -- version = "v3.*",
         dependencies = 'nvim-tree/nvim-web-devicons',
         event = 'BufAdd',
         config = function()

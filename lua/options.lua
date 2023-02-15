@@ -1,6 +1,8 @@
 -- バックアップを取らない
 vim.opt.backup = false
 vim.opt.writebackup = false
+-- swapファイルの作成およびCursorHoldの判定時間
+vim.opt.updatetime = 1000
 -- マウスの操作を全部有効化
 vim.opt.mouse = 'a'
 -- ウィンドウ幅を超えた行をラップしない
@@ -10,7 +12,19 @@ vim.opt.whichwrap = 'b,s,h,l,<,>,[,],~'
 -- 矩形選択で文字がなくても右に進める
 vim.opt.virtualedit = 'block'
 -- ヤンクしたときにクリップボードに保存
--- vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = 'unnamedplus'
+vim.cmd [[ let g:clipboard = {
+          \   'name': 'myClipboard',
+          \   'copy': {
+          \      '+': ['tmux', 'load-buffer', '-'],
+          \      '*': ['tmux', 'load-buffer', '-'],
+          \    },
+          \   'paste': {
+          \      '+': ['tmux', 'save-buffer', '-'],
+          \      '*': ['tmux', 'save-buffer', '-'],
+          \   },
+          \   'cache_enabled': 1,
+          \ } ]]
 
 -- 行番号を表示
 vim.opt.number = true
@@ -18,8 +32,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 -- 編集行を強調
 vim.opt.cursorline = true
--- 行番号の左にサインを表示する列を常に表示
-vim.opt.signcolumn = 'yes'
 -- 対応する括弧を表示
 vim.opt.showmatch.matchtime = 1
 -- 行末のスペースを可視化

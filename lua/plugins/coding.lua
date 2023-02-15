@@ -1,12 +1,30 @@
 return {
     -- Snipet engine
-    'L3MON4D3/LuaSnip',
+    {
+        'L3MON4D3/LuaSnip',
+        keys = {
+            {
+                '<C-i>',
+                function()
+                    require('luasnip').jump(1)
+                end,
+                mode = { "i", "s" }
+            },
+            {
+                '<C-k>',
+                function()
+                    require('luasnip').jump( -1)
+                end,
+                mode = { "i", "s" }
+            },
+        }
+    },
 
     -- Completion
     {
         'hrsh7th/nvim-cmp',
         version = false, -- last release is way too old
-        event = "InsertEnter",
+        event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
             -- Completion sources
             'hrsh7th/cmp-nvim-lsp',
@@ -41,20 +59,6 @@ return {
                     --         cmp.confirm{ select = true }
                     --     end
                     -- end),
-                    ['<C-i>'] = cmp.mapping(function(fallback)
-                        if luasnip.jumpable(1) then
-                            luasnip.jump(1)
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
-                    ['<C-k>'] = cmp.mapping(function(fallback)
-                        if luasnip.jumpable( -1) then
-                            luasnip.jump( -1)
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
                     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
                     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
                     ['<C-m>'] = cmp.mapping.scroll_docs(4),
@@ -75,20 +79,16 @@ return {
             cmp.setup.cmdline({ '/', '?' }, {
                 mapping = {
                     ['<Tab>'] = {
-                        c = function(fallback)
+                        c = function()
                             if cmp.visible() then
                                 cmp.select_next_item()
-                            else
-                                fallback()
                             end
                         end
                     },
                     ['<S-Tab>'] = {
-                        c = function(fallback)
+                        c = function()
                             if cmp.visible() then
                                 cmp.select_prev_item()
-                            else
-                                fallback()
                             end
                         end
                     },
@@ -155,12 +155,14 @@ return {
     -- Automatically close surroundings
     {
         "windwp/nvim-autopairs",
+        event = "VeryLazy",
         config = true,
     },
 
     -- Toggle comments
     {
         'numToStr/Comment.nvim',
+        event = "VeryLazy",
         config = true,
     },
 }

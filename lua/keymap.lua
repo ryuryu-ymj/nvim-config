@@ -26,6 +26,8 @@ vim.keymap.set('i', '<A-L>', '<C-\\><C-N><C-w>L')
 -- vim.keymap.set('n', '<S-Right>', '<Cmd>+tabmove<CR>')
 -- vim.keymap.set('i', '<S-Left>', '<Cmd>-tabmove<CR>')
 -- vim.keymap.set('i', '<S-Right>', '<Cmd>+tabmove<CR>')
+-- <Leader>qでバッファを削除
+vim.keymap.set('n', '<Leader>q', '<Cmd>bdelete<CR>')
 
 -- insertモードでemacs風のキーバインド
 vim.keymap.set('i', '<C-a>', '<Home>')
@@ -34,19 +36,19 @@ vim.keymap.set('i', '<C-d>', '<Delete>')
 vim.keymap.set('i', '<C-k>', '<Esc>lDa')
 vim.keymap.set('c', '<C-p>', '<Up>')
 vim.keymap.set('c', '<C-n>', '<Down>')
-vim.keymap.set({'i', 'c'}, '<C-b>', '<Left>')
-vim.keymap.set({'i', 'c'}, '<C-f>', '<Right>')
+vim.keymap.set({ 'i', 'c' }, '<C-b>', '<Left>')
+vim.keymap.set({ 'i', 'c' }, '<C-f>', '<Right>')
 
 -- 消去したときにレジスタを汚さない
-vim.keymap.set({'n', 'v'}, 'd', '"_d')
+vim.keymap.set({ 'n', 'x' }, 'd', '"_d')
 vim.keymap.set('n', 'dd', '"_dd')
 vim.keymap.set('n', 'D', '"_D')
-vim.keymap.set({'n', 'v'}, 'x', '"_x')
-vim.keymap.set({'n', 'v'}, 'c', '"_c')
+vim.keymap.set({ 'n', 'x' }, 'x', '"_x')
+vim.keymap.set({ 'n', 'x' }, 'c', '"_c')
 vim.keymap.set('n', 'cc', '"_cc')
 vim.keymap.set('n', 'C', '"_C')
 -- カットにはsを用いる
-vim.keymap.set({'n', 'v'}, 's', 'd')
+vim.keymap.set({ 'n', 'x' }, 's', 'd')
 vim.keymap.set('n', 'ss', 'dd')
 vim.keymap.set('n', 'S', 'D')
 
@@ -54,7 +56,7 @@ vim.keymap.set('n', 'S', 'D')
 -- vim.keymap.set('n', 'gJ', function ()
 --   vim.cmd[[substitute/\n\s*//]]
 -- end)
-vim.cmd[[
+vim.cmd [[
 nnoremap <expr> gJ JointLinesWithNoSpaces()
 
 function JointLinesWithNoSpaces(type = '') abort
@@ -67,7 +69,7 @@ endfunction
 ]]
 
 -- YでWindowsのクリップボードにコピー
-vim.cmd[[
+vim.cmd [[
 nnoremap <silent> Y :set opfunc=WslYankOperator<CR>g@
 nmap <silent> YY Y_
 nmap <silent> Yy Y_
