@@ -13,7 +13,7 @@ return {
     -- Configs for the LSP client
     {
         'neovim/nvim-lspconfig',
-        event = { "BufReadPre", "BufNewFile" },
+        -- event = { "BufReadPre", "BufNewFile" },
         dependencies = {
             'hrsh7th/cmp-nvim-lsp',
         },
@@ -27,6 +27,13 @@ return {
             vim.keymap.set('n', 'g]', vim.diagnostic.goto_next, opts)
             vim.keymap.set('n', 'g[', vim.diagnostic.goto_prev, opts)
             vim.keymap.set('n', '<Leader>dl', vim.diagnostic.setloclist, opts)
+
+            -- Set diagnostics signs
+            local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+            for type, icon in pairs(signs) do
+                local hl = "DiagnosticSign" .. type
+                vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+            end
 
             -- Use an on_attach function to only map the following keys
             -- after the language server attaches to the current buffer
@@ -88,14 +95,14 @@ return {
                 end
             end
 
-            local lsp_flags = {
-                -- This is the default in Nvim 0.7+
-                debounce_text_changes = 150,
+            local handlers = {
+                -- ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+                -- ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
             }
 
             require('lspconfig')['lua_ls'].setup {
                 on_attach = on_attach,
-                flags = lsp_flags,
+                handlers = handlers,
                 capabilities = capabilities,
                 settings = {
                     Lua = {
@@ -119,14 +126,21 @@ return {
                     },
                 },
             }
+
             require('lspconfig')['rust_analyzer'].setup {
                 on_attach = on_attach,
-                flags = lsp_flags,
                 capabilities = capabilities,
+                handlers = handlers,
                 -- Server-specific settings...
                 settings = {
                     ['rust-analyzer'] = {},
                 }
+            }
+
+            require('lspconfig')['marksman'].setup {
+                on_attach = on_attach,
+                capabilities = capabilities,
+                handlers = handlers,
             }
         end,
     },
@@ -134,7 +148,7 @@ return {
     -- Show inlay hints
     {
         'lvimuser/lsp-inlayhints.nvim',
-        event = { "BufReadPre", "BufNewFile" },
+        -- event = { "BufReadPre", "BufNewFile" },
         config = function()
             require('lsp-inlayhints').setup()
             vim.api.nvim_create_augroup('LspAttach_inlayhints', {})
@@ -157,7 +171,7 @@ return {
     -- Show lsp progress at the right bottom corner
     {
         'j-hui/fidget.nvim',
-        event = { "BufReadPre", "BufNewFile" },
+        -- event = { "BufReadPre", "BufNewFile" },
         config = function()
             require("fidget").setup()
         end

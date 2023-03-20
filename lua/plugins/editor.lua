@@ -16,13 +16,27 @@ return {
         opts = {
             signs = {
                 add = { text = "▎" },
-                change = { text = "▎" },
+                change = { text = "░" },
                 delete = { text = "" },
                 topdelete = { text = "" },
-                changedelete = { text = "▎" },
+                changedelete = { text = "░" },
                 untracked = { text = "▎" },
             },
         },
+    },
+
+    -- better diagnostics list and others
+    {
+        "folke/trouble.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        cmd = { "TroubleToggle", "Trouble" },
+        keys = {
+            { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>",  desc = "Document Diagnostics (Trouble)" },
+            { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
+            { "<leader>xL", "<cmd>TroubleToggle loclist<cr>",               desc = "Location List (Trouble)" },
+            { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>",              desc = "Quickfix List (Trouble)" },
+        },
+        config = true,
     },
 
     -- Show code outline

@@ -1,3 +1,5 @@
+-- ホイールのクリックによるペーストを無効化
+vim.keymap.set({ '', 'n' }, '<MiddleMouse>', '<Nop>')
 -- Alt+h,j,k,lでウィンドウ間の移動
 vim.keymap.set('n', '<A-h>', '<C-w>h')
 vim.keymap.set('n', '<A-j>', '<C-w>j')
@@ -28,14 +30,16 @@ vim.keymap.set('i', '<A-L>', '<C-\\><C-N><C-w>L')
 -- vim.keymap.set('i', '<S-Right>', '<Cmd>+tabmove<CR>')
 -- <Leader>qでバッファを削除
 vim.keymap.set('n', '<Leader>q', '<Cmd>bdelete<CR>')
+-- <Leader>wでバッファを保存
+vim.keymap.set('n', '<Leader>w', '<Cmd>write<CR>')
 
 -- insertモードでemacs風のキーバインド
-vim.keymap.set('i', '<C-a>', '<Home>')
+vim.keymap.set('i', '<C-a>', '<C-o>^')
 vim.keymap.set('i', '<C-e>', '<End>')
 vim.keymap.set('i', '<C-d>', '<Delete>')
-vim.keymap.set('i', '<C-k>', '<Esc>lDa')
-vim.keymap.set('c', '<C-p>', '<Up>')
-vim.keymap.set('c', '<C-n>', '<Down>')
+-- vim.keymap.set('i', '<C-k>', '<Esc>lDa')
+-- vim.keymap.set('c', '<C-p>', '<Up>')
+-- vim.keymap.set('c', '<C-n>', '<Down>')
 vim.keymap.set({ 'i', 'c' }, '<C-b>', '<Left>')
 vim.keymap.set({ 'i', 'c' }, '<C-f>', '<Right>')
 
