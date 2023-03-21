@@ -1,0 +1,26 @@
+:root {
+  --my-hl-bg-color: #e8de9b;
+}
+
+[data-theme="dark"] {
+  --my-hl-bg-color: #73671c;
+}
+
+.markdown-body {
+  overflow:hidden;
+  padding: 6px;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+em {
+  font-style: normal;
+  background-color: var(--my-hl-bg-color);
+}
+
+.katex .katex-html>.newline {
+    display: block;
+    padding-bottom: 4px;
+}

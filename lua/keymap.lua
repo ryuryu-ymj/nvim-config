@@ -33,6 +33,9 @@ vim.keymap.set('n', '<Leader>q', '<Cmd>bdelete<CR>')
 -- <Leader>wでバッファを保存
 vim.keymap.set('n', '<Leader>w', '<Cmd>write<CR>')
 
+-- ^, $の代わりにH, Lで行頭行末移動
+vim.keymap.set({ 'n', 'v' }, 'H', '^')
+vim.keymap.set({ 'n', 'v' }, 'L', '$')
 -- insertモードでemacs風のキーバインド
 vim.keymap.set('i', '<C-a>', '<C-o>^')
 vim.keymap.set('i', '<C-e>', '<End>')
