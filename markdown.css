@@ -20,6 +20,12 @@ em {
   background-color: var(--my-hl-bg-color);
 }
 
+img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+}
+
 .katex .katex-html>.newline {
     display: block;
     padding-bottom: 4px;

@@ -16,13 +16,15 @@ return {
                 enable = true,
             },
 
+            indent = {
+                enable = true,
+            },
+
             textobjects = {
                 select = {
                     enable = true,
-
                     -- Automatically jump forward to textobj, similar to targets.vim
                     lookahead = true,
-
                     keymaps = {
                         -- You can use the capture groups defined in textobjects.scm
                         ["af"] = "@function.outer",
@@ -58,7 +60,6 @@ return {
                     -- and should return true of false
                     include_surrounding_whitespace = true,
                 },
-
                 swap = {
                     enable = true,
                     swap_next = {
@@ -68,7 +69,6 @@ return {
                         ["<Leader>ap"] = "@parameter.inner",
                     },
                 },
-
                 move = {
                     enable = true,
                     set_jumps = true, -- whether to set jumps in the jumplist

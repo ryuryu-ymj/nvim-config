@@ -37,6 +37,8 @@ vim.keymap.set('n', '<Leader>w', '<Cmd>write<CR>')
 vim.keymap.set({ 'n', 'v' }, 'H', '^')
 vim.keymap.set({ 'n', 'v' }, 'L', '$')
 -- insertモードでemacs風のキーバインド
+vim.keymap.set('i', '<C-h>', '<BS>', { remap = true })
+vim.keymap.set('i', '<C-j>', '<CR>', { remap = true })
 vim.keymap.set('i', '<C-a>', '<C-o>^')
 vim.keymap.set('i', '<C-e>', '<End>')
 vim.keymap.set('i', '<C-d>', '<Delete>')

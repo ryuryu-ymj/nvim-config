@@ -1,27 +1,32 @@
 return {
     -- Snipet engine
-    {
-        'L3MON4D3/LuaSnip',
-        keys = {
-            {
-                '<C-i>',
-                function()
-                    require('luasnip').jump(1)
-                end,
-                mode = { "i", "s" }
-            },
-            {
-                '<C-k>',
-                function()
-                    require('luasnip').jump( -1)
-                end,
-                mode = { "i", "s" }
-            },
-        },
-        config = function()
-            require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
-        end
-    },
+    -- {
+    --     'L3MON4D3/LuaSnip',
+    --     keys = {
+    --         {
+    --             '<C-i>',
+    --             function()
+    --                 local snip = require('luasnip')
+    --                 if snip.jumpable(1) then
+    --                     snip.jump(1)
+    --                 else
+    --
+    --                 end
+    --             end,
+    --             mode = { "i", "s" }
+    --         },
+    --         {
+    --             '<C-k>',
+    --             function()
+    --                 require('luasnip').jump(-1)
+    --             end,
+    --             mode = { "i", "s" }
+    --         },
+    --     },
+    --     config = function()
+    --         require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+    --     end
+    -- },
 
     -- Completion
     {
@@ -29,6 +34,30 @@ return {
         version = false, -- last release is way too old
         event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
+            -- snipet engine
+            {
+                'L3MON4D3/LuaSnip',
+                config = function()
+                    vim.api.nvim_set_hl(0, 'LuasnipInsertNodePassive', { link = 'GruvboxRedUnderline' })
+                    vim.api.nvim_set_hl(0, 'LuasnipInsertNodeActive', { link = 'GruvboxAquaUnderline' })
+
+                    require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+
+                    -- local types = require("luasnip.util.types")
+                    require("luasnip").setup({
+                        -- ext_opts = {
+                        --     [types.insertNode] = {
+                        --         active = {
+                        --             hl_group = "GruvboxAqua"
+                        --         },
+                        --         unvisited = {
+                        --             hl_group = "GruvboxRed"
+                        --         },
+                        --     },
+                        -- },
+                    })
+                end
+            },
             -- Completion sources
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
@@ -65,7 +94,23 @@ return {
                     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
                     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
                     ['<C-m>'] = cmp.mapping.scroll_docs(4),
-                    ['<C-o>'] = cmp.mapping.scroll_docs( -4),
+                    ['<C-o>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-i>'] = cmp.mapping(function(fallback)
+                        local snip = require('luasnip')
+                        if snip.jumpable(1) then
+                            snip.jump(1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                    ['<C-k>'] = cmp.mapping(function(fallback)
+                        local snip = require('luasnip')
+                        if snip.jumpable(-1) then
+                            snip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
                 },
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
@@ -149,6 +194,8 @@ return {
             { mode = 'v',          'S',   '<Plug>(operator-sandwich-add)' },
             { mode = { 'x', 'o' }, 'ib',  '<Plug>(textobj-sandwich-auto-i)' },
             { mode = { 'x', 'o' }, 'ab',  '<Plug>(textobj-sandwich-auto-a)' },
+            { mode = { 'x', 'o' }, 'is',  '<Plug>(textobj-sandwich-query-i)' },
+            { mode = { 'x', 'o' }, 'as',  '<Plug>(textobj-sandwich-query-a)' },
         },
         config = function()
             vim.fn['operator#sandwich#set']('all', 'all', 'hi_duration', 100)
@@ -159,7 +206,26 @@ return {
     {
         "windwp/nvim-autopairs",
         event = "VeryLazy",
-        config = true,
+        config = function()
+            local npairs = require('nvim-autopairs')
+            npairs.setup()
+            -- vim.keymap.set('i', '<C-h>', function()
+            --     return npairs.autopairs_bs()
+            -- end)
+
+            local rule = require('nvim-autopairs.rule')
+            local cond = require('nvim-autopairs.conds')
+
+            npairs.get_rule('(')
+                :with_pair(cond.not_before_text('\\'))
+            npairs.get_rule('[')
+                :with_pair(cond.not_before_text('\\'))
+            npairs.get_rule('{')
+                :with_pair(cond.not_before_text('\\'))
+            npairs.add_rules({
+                rule('$', '$', "markdown")
+            })
+        end
     },
 
     -- Toggle comments

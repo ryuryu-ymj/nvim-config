@@ -551,10 +551,6 @@
         "prefix": "\\because",
         "body": ["\\because"]
     },
-    "begin": {
-        "prefix": "\\begin",
-        "body": ["\\begin"]
-    },
     "beta": {
         "prefix": "\\beta",
         "body": ["\\beta"]
@@ -3616,12 +3612,24 @@
         "body": ["\\zeta"]
     },
 
-    "block math": {
-        "prefix": "dm",
+    "paren": {
+        "prefix": "\\(",
+        "body": ["\\left($1\\right)"]
+    },
+    "bracket": {
+        "prefix": "\\[",
+        "body": ["\\left[$1\\right]"]
+    },
+    "brace": {
+        "prefix": "\\{",
+        "body": ["\\left\\{$1\\right\\\\}"]
+    },
+    "env": {
+        "prefix": "\\begin",
         "body": [
-            "$$",
-            "$0",
-            "$$"
+            "\\begin{${1:env}}",
+            "    ${2:body}",
+            "\\end{$1}"
         ]
     }
 }
