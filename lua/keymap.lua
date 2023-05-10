@@ -1,5 +1,8 @@
 -- ホイールのクリックによるペーストを無効化
-vim.keymap.set({ '', 'n' }, '<MiddleMouse>', '<Nop>')
+vim.keymap.set({ '', '!' }, '<MiddleMouse>', '<Nop>')
+-- Shift+ホイールで左右スクロール
+vim.keymap.set({ '', '!' }, '<S-ScrollWheelUp>', '3zh')
+vim.keymap.set({ '', '!' }, '<S-ScrollWheelDown>', '3zl')
 -- Alt+h,j,k,lでウィンドウ間の移動
 vim.keymap.set('n', '<A-h>', '<C-w>h')
 vim.keymap.set('n', '<A-j>', '<C-w>j')
@@ -39,14 +42,14 @@ vim.keymap.set({ 'n', 'v' }, 'L', '$')
 -- insertモードでemacs風のキーバインド
 vim.keymap.set('i', '<C-h>', '<BS>', { remap = true })
 vim.keymap.set('i', '<C-j>', '<CR>', { remap = true })
-vim.keymap.set('i', '<C-a>', '<C-o>^')
+vim.keymap.set('!', '<C-a>', '<C-o>^')
 vim.keymap.set('i', '<C-e>', '<End>')
 vim.keymap.set('i', '<C-d>', '<Delete>')
 -- vim.keymap.set('i', '<C-k>', '<Esc>lDa')
--- vim.keymap.set('c', '<C-p>', '<Up>')
--- vim.keymap.set('c', '<C-n>', '<Down>')
-vim.keymap.set({ 'i', 'c' }, '<C-b>', '<Left>')
-vim.keymap.set({ 'i', 'c' }, '<C-f>', '<Right>')
+vim.keymap.set('!', '<C-b>', '<Left>')
+vim.keymap.set('!', '<C-f>', '<Right>')
+vim.keymap.set('c', '<C-p>', '<Up>')
+vim.keymap.set('c', '<C-n>', '<Down>')
 
 -- 消去したときにレジスタを汚さない
 vim.keymap.set({ 'n', 'x' }, 'd', '"_d')
@@ -96,7 +99,7 @@ function! WslYankOperator(type, ...) abort
   else
     silent exe "normal! `[v`]y"
   endif
-  call system('clip.exe', @@)
+  call system('wclip', @@)
   let &selection = sel_save
   let @@ = reg_save
 endfunction
@@ -104,7 +107,7 @@ endfunction
 function! WslYankCommand(line1, line2) abort
   let reg_save = @@
   exe a:line1 . ',' a:line2 'yank'
-  call system('clip.exe', @@)
+  call system('wclip', @@)
   echo (a:line2 - a:line1 + 1) . ' lines yanked into Windows Clipboard'
   let @@ = reg_save
 endfunction

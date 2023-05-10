@@ -64,6 +64,21 @@ return {
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-cmdline',
             'saadparwaiz1/cmp_luasnip',
+            {
+                'uga-rosa/cmp-dictionary',
+                config = function()
+                    local dict = require('cmp_dictionary')
+                    dict.setup {
+                        exact = 4,
+                    }
+                    dict.switcher {
+                        spelllang = {
+                            en = vim.fn.stdpath('config') .. '/dict/en.dict',
+                        }
+                    }
+                end
+            },
+            -- 'f3fora/cmp-spell',
         },
         config = function()
             local cmp = require('cmp')
@@ -120,6 +135,8 @@ return {
                     -- { name = 'snippy' }, -- For snippy users.
                 }, {
                     { name = 'buffer' },
+                }, {
+                    { name = 'dictionary' },
                 })
             })
 
@@ -177,7 +194,6 @@ return {
         end,
     },
 
-
     -- Add/delete/replace surroundings such as (), "".
     {
         'machakann/vim-sandwich',
@@ -224,6 +240,10 @@ return {
                 :with_pair(cond.not_before_text('\\'))
             npairs.add_rules({
                 rule('$', '$', "markdown")
+                    :with_pair(cond.not_after_regex('[^ \\t\\r\\n,.]', 1))
+                    :with_move(function(opts)
+                        return opts.next_char == opts.char
+                    end)
             })
         end
     },
@@ -232,6 +252,11 @@ return {
     {
         'numToStr/Comment.nvim',
         event = "VeryLazy",
+        config = true,
+    },
+
+    {
+        'NMAC427/guess-indent.nvim',
         config = true,
     },
 }

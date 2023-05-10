@@ -7,11 +7,11 @@ return {
             vim.g.vim_markdown_math = 1
             vim.g.vim_markdown_folding_disabled = 1
 
-            vim.keymap.set('i', 'mk', "$$<C-\\><C-N>i")
-            vim.keymap.set('i', 'dm', "$$\n\n$$<C-o>k")
+            local map_opts = { buffer = true }
+            vim.keymap.set('i', 'mk', "$$<C-\\><C-N>i", map_opts)
+            vim.keymap.set('i', 'dm', "$$\n\n$$<C-o>k", map_opts)
 
-            vim.g.mkdp_markdown_css = vim.fn.expand('./markdown.css')
-            vim.g.mkdp_markdown_css = vim.fn.expand('~/.config/nvim/markdown.css')
+            vim.g.mkdp_markdown_css = vim.fn.stdpath('config') .. '/markdown.css'
 
             local imap_leader = "@"
             local imap_list = {
@@ -82,7 +82,7 @@ return {
             }
 
             for _, imap in pairs(imap_list) do
-                vim.keymap.set('i', imap_leader .. imap.lhs, imap.rhs)
+                vim.keymap.set('i', imap_leader .. imap.lhs, imap.rhs, map_opts)
             end
         end,
     },
@@ -110,11 +110,12 @@ return {
         ft = { "markdown" },
         config = function()
             vim.cmd [[
-            function OpenMarkdownPreview (url)
-                execute "silent ! firefox.exe --new-window " . a:url
-                endfunction
+            function! OpenMarkdownPreview(url)
+                execute "silent ! chrome.exe --app=" .. a:url .. "&"
+            endfunction
             ]]
             vim.g.mkdp_browserfunc = 'OpenMarkdownPreview'
+            -- vim.g.mkdp_browser = '/mnt/c/Program Files/Google/Chrome/Application'
         end,
     },
 }

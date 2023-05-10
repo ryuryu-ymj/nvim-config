@@ -1,3 +1,64 @@
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+    -- 行番号の左にサインを表示する列を常に表示
+    vim.opt_local.signcolumn = 'yes'
+
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<Leader>ac', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', '<Leader>l', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('n', '<Leader>w', function()
+        vim.lsp.buf.format()
+        vim.cmd.write()
+    end, bufopts)
+    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    -- vim.keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    -- vim.keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    -- vim.keymap.set('n', '<Leader>wl', function()
+    --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    -- end, bufopts)
+    -- vim.keymap.set('n', '<Leader>D', vim.lsp.buf.type_definition, bufopts)
+
+    -- カーソル下の変数などをハイライト
+    if client.server_capabilities.documentHighlightProvider then
+        -- vim.cmd [[
+        -- hi! LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+        -- hi! LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+        -- hi! LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+        -- ]]
+        vim.api.nvim_set_hl(0, 'LspReferenceRead', { bg = '#3c3836' })
+        vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#3c3836' })
+        vim.api.nvim_set_hl(0, 'LspReferenceWrite', { bg = '#3c3836' })
+        vim.api.nvim_create_augroup('lsp_document_highlight', {
+            clear = false
+        })
+        vim.api.nvim_clear_autocmds({
+            buffer = bufnr,
+            group = 'lsp_document_highlight',
+        })
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+            group = 'lsp_document_highlight',
+            buffer = bufnr,
+            callback = vim.lsp.buf.document_highlight,
+        })
+        vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+            group = 'lsp_document_highlight',
+            buffer = bufnr,
+            callback = vim.lsp.buf.clear_references,
+        })
+    end
+end
+
+
 return {
     -- Lsp server manager
     {
@@ -22,7 +83,7 @@ return {
 
             -- Mappings.
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-            local opts = { noremap = true, silent = true }
+            local opts = { noremap = true, silent = true, buffer = true }
             vim.keymap.set('n', '<Leader>dk', vim.diagnostic.open_float, opts)
             vim.keymap.set('n', 'g]', vim.diagnostic.goto_next, opts)
             vim.keymap.set('n', 'g[', vim.diagnostic.goto_prev, opts)
@@ -33,66 +94,6 @@ return {
             for type, icon in pairs(signs) do
                 local hl = "DiagnosticSign" .. type
                 vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-            end
-
-            -- Use an on_attach function to only map the following keys
-            -- after the language server attaches to the current buffer
-            local on_attach = function(client, bufnr)
-                -- 行番号の左にサインを表示する列を常に表示
-                vim.opt_local.signcolumn = 'yes'
-
-                -- Enable completion triggered by <c-x><c-o>
-                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-                -- Mappings.
-                -- See `:help vim.lsp.*` for documentation on any of the below functions
-                local bufopts = { noremap = true, silent = true, buffer = bufnr }
-                vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-                vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-                vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-                vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
-                vim.keymap.set('n', '<Leader>ac', vim.lsp.buf.code_action, bufopts)
-                vim.keymap.set('n', '<Leader>l', function() vim.lsp.buf.format { async = true } end, bufopts)
-                vim.keymap.set('n', '<Leader>w', function()
-                    vim.lsp.buf.format()
-                    vim.cmd.write()
-                end, bufopts)
-                -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-                -- vim.keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-                -- vim.keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-                -- vim.keymap.set('n', '<Leader>wl', function()
-                --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                -- end, bufopts)
-                -- vim.keymap.set('n', '<Leader>D', vim.lsp.buf.type_definition, bufopts)
-
-                -- カーソル下の変数などをハイライト
-                if client.server_capabilities.documentHighlightProvider then
-                    -- vim.cmd [[
-                    -- hi! LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-                    -- hi! LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-                    -- hi! LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-                    -- ]]
-                    vim.api.nvim_set_hl(0, 'LspReferenceRead', { bg = '#3c3836' })
-                    vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#3c3836' })
-                    vim.api.nvim_set_hl(0, 'LspReferenceWrite', { bg = '#3c3836' })
-                    vim.api.nvim_create_augroup('lsp_document_highlight', {
-                        clear = false
-                    })
-                    vim.api.nvim_clear_autocmds({
-                        buffer = bufnr,
-                        group = 'lsp_document_highlight',
-                    })
-                    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-                        group = 'lsp_document_highlight',
-                        buffer = bufnr,
-                        callback = vim.lsp.buf.document_highlight,
-                    })
-                    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-                        group = 'lsp_document_highlight',
-                        buffer = bufnr,
-                        callback = vim.lsp.buf.clear_references,
-                    })
-                end
             end
 
             local handlers = {
@@ -141,6 +142,23 @@ return {
                 -- on_attach = on_attach,
                 capabilities = capabilities,
                 handlers = handlers,
+            }
+        end,
+    },
+
+    {
+        "jose-elias-alvarez/null-ls.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            local nl = require("null-ls")
+            nl.setup {
+                sources = {
+                    -- nl.builtins.completion.spell,
+                    nl.builtins.formatting.prettier.with {
+                        disabled_filetypes = { 'markdown' },
+                    },
+                },
+                on_attach = on_attach,
             }
         end,
     },
