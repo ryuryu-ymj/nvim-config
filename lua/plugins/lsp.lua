@@ -10,6 +10,10 @@ local on_attach = function(client, bufnr)
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set('n', '<Leader>dk', vim.diagnostic.open_float, bufopts)
+    vim.keymap.set('n', 'g]', vim.diagnostic.goto_next, bufopts)
+    vim.keymap.set('n', 'g[', vim.diagnostic.goto_prev, bufopts)
+    vim.keymap.set('n', '<Leader>dl', vim.diagnostic.setloclist, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
@@ -190,6 +194,7 @@ return {
     {
         'j-hui/fidget.nvim',
         -- event = { "BufReadPre", "BufNewFile" },
+        branch = "legacy",
         config = function()
             require("fidget").setup()
         end
